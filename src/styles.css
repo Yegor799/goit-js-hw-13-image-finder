@@ -12,6 +12,33 @@ li {
   list-style: none;
 }
 
-a {
-  text-decoration: none;
+#search-form {
+  display: flex;
+  justify-content: center;
+  padding-top: 20px;
+  margin-bottom: 20px;
+}
+
+.button-secondary {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.button-secondary.is-hidden {
+  display: none;
+}
+
+img {
+  display: block;
+  width: 100%;
+  height: auto;
+  cursor: pointer;
+}
+
+.gallery {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  grid-gap: 10px;
+  list-style: none;
 }
