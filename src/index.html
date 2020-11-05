@@ -7,7 +7,29 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
 </head>
 <body>
-    
+    <form class="search-form" id="search-form">
+      <input
+    type="text"
+    name="query"
+    autocomplete="off"
+    placeholder="Search images..."
+      />
+    <button type="submit" class="button">Искать</button>
+    </form>
+
+    <ul class="gallery">
+        <!-- Список <li> с карточками изображений -->
+    </ul>
+
+    <button type="button" class="button-secondary is-hidden" data-action="load-more">
+        Загрузить еще
+    </button>
+
+    <template>
+      <div class="modal">
+        <p>Modal</p>
+      </div>
+    </template>
 
     
     <script src="./index.js"></script>
