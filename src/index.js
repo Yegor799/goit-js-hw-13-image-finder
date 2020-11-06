@@ -3,55 +3,67 @@ import NewsApiService from './js/apiService.js'
 import imagesTpl from './templates/imageCard.hbs'
 import * as basicLightbox from 'basiclightbox';
 import 'basiclightbox/dist/basicLightbox.min.css';
+import LoadMoreBtn from './js/loadMoreBtn'
 
 const searchForm = document.querySelector('.search-form');
 const gallery = document.querySelector('.gallery');
-const loadMoreButton = document.querySelector('[data-action="load-more"]')
+
+const loadMoreBtn = new LoadMoreBtn({
+  selector: '[data-action="load-more"]',
+  hidden: true,
+});
 
 const newsApiService = new NewsApiService();
 
 
 searchForm.addEventListener('submit', onSearch);
-loadMoreButton.addEventListener('click', onLoadMore);
+loadMoreBtn.refs.button.addEventListener('click', onLoadMore);
 gallery.addEventListener('click', onOpenModal);
 
-window.scrollTo({
-        behavior: "smooth"
-});
+
 
 function onSearch(e) {
     e.preventDefault();
 
-    newsApiService.query = e.currentTarget.elements.query.value;
-    
+    newsApiService.query = e.currentTarget.elements.query.value;    
 
     if (newsApiService.query === '') {
     return;
     }
     
+    loadMoreBtn.show();
     newsApiService.resetPage();
     clearImagesContainer();
     fetchImages();
 
 }
 
-async function onLoadMore() {
+async function onLoadMore() { 
     
-   window.scrollTo({
-      behavior: "smooth"
-});  
-  
-  const loadMore = await newsApiService.fetchImages();  
-  return appendImagesMarkup(loadMore);
+  loadMoreBtn.disable();
+  const loadMore = await newsApiService.fetchImages();   
+  setTimeout(() => {
+        window.scrollBy({
+          top: document.documentElement.clientHeight - 100,
+          behavior: 'smooth',
+        });
+      }, 1000),
+
+  appendImagesMarkup(loadMore);
+  loadMoreBtn.enable();
   
   
 }
 
 async function fetchImages() {
- 
-  const images = await newsApiService.fetchImages();
-  appendImagesMarkup(images);
-  loadMoreButton.classList.remove('is-hidden');
+  
+  const images = await newsApiService.fetchImages();  
+  appendImagesMarkup(images);  
+  loadMoreBtn.enable();
+
+  if (images.length === 0) {    
+     loadMoreBtn.hide();
+  }
 }
 
 function appendImagesMarkup(images) {
@@ -63,6 +75,7 @@ function clearImagesContainer() {
 }
 
 function onOpenModal(e) {
+
     if (e.target.nodeName !== 'IMG') {
     return;
   }
